@@ -117,7 +117,8 @@ Pull requests and pushes run build checks only. Deployment is manual.
 
 After a reviewed change has been merged into `main`, an authorized release can be
 published by running **Deploy GitHub Pages** from the GitHub Actions page, selecting
-`main`. The deployment workflow builds the site and publishes only `dist/`.
+`main`. If the deployment workflow is paused, enable it only as part of that
+authorized release. The deployment workflow builds the site and publishes only `dist/`.
 The workflow will not deploy a feature branch.
 
 The repository base path is `/portfolio/`, configured in `vite.config.ts`.
