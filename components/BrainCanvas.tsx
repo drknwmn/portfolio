@@ -1,4 +1,5 @@
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
+import useReducedMotion from "../hooks/useReducedMotion";
 
 const brainPathsData = {
   viewBox: [0, 0, 390, 280],
@@ -39,8 +40,16 @@ interface Particle {
   phase: number;
 }
 
-const BrainCanvas: React.FC = () => {
+const BrainCanvas = ({ paused = false }: { paused?: boolean }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const reducedMotion = useReducedMotion();
+  const pausedRef = useRef(paused);
+  const syncRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    pausedRef.current = paused;
+    syncRef.current?.();
+  }, [paused]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -50,7 +59,9 @@ const BrainCanvas: React.FC = () => {
     if (!ctx) return;
 
     let particles: Particle[] = [];
-    let animationFrameId: number;
+    let animationFrameId = 0;
+    let width = 0;
+    let height = 0;
 
     const pathElements = allPathStrings.map((pathString) => {
       const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -59,33 +70,36 @@ const BrainCanvas: React.FC = () => {
     });
 
     const pathLengths = pathElements.map((path) => path.getTotalLength());
-    const totalLength = pathLengths.reduce((a, b) => a + b, 0);
+    const totalLength = pathLengths.reduce((total, length) => total + length, 0);
 
     const resizeCanvas = () => {
       const parent = canvas.parentElement;
       if (!parent) return;
 
-      canvas.width = parent.clientWidth;
-      canvas.height = parent.clientHeight;
+      width = parent.clientWidth;
+      height = parent.clientHeight;
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(width * ratio);
+      canvas.height = Math.floor(height * ratio);
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
       initParticles();
     };
 
     const initParticles = () => {
       particles = [];
-      const numParticles = 760;
+      const numParticles = width < 480 ? 480 : 760;
       const viewBox = brainPathsData.viewBox;
       const scale =
-        (Math.min(canvas.width, canvas.height) * 0.92) /
-        Math.max(viewBox[2], viewBox[3]);
+        Math.min(width / viewBox[2], height / viewBox[3]) * 0.9;
 
       pathElements.forEach((pathElement, index) => {
         const pathLength = pathLengths[index];
         const numParticlesForPath = Math.ceil((pathLength / totalLength) * numParticles);
 
-        for (let i = 0; i < numParticlesForPath; i += 1) {
-          const point = pathElement.getPointAtLength((i / numParticlesForPath) * pathLength);
-          const anchorX = (point.x - viewBox[2] / 2) * scale + canvas.width / 2;
-          const anchorY = (point.y - viewBox[3] / 2) * scale + canvas.height / 2;
+        for (let particleIndex = 0; particleIndex < numParticlesForPath; particleIndex += 1) {
+          const point = pathElement.getPointAtLength((particleIndex / numParticlesForPath) * pathLength);
+          const anchorX = (point.x - viewBox[2] / 2) * scale + width / 2;
+          const anchorY = (point.y - viewBox[3] / 2) * scale + height / 2;
 
           particles.push({
             x: anchorX,
@@ -101,38 +115,40 @@ const BrainCanvas: React.FC = () => {
       });
     };
 
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const draw = (advance: boolean) => {
+      ctx.clearRect(0, 0, width, height);
       const accentColor = "255, 255, 255";
       const time = performance.now() * 0.001;
       const SPRING_CONSTANT = 0.00335;
       const DAMPING = 0.953;
       const NOISE = 0.048;
-      const pulse = 1 + Math.sin(time * 1.45) * 0.02;
+      const pulse = advance ? 1 + Math.sin(time * 1.45) * 0.02 : 1;
 
       particles.forEach((particle) => {
-        const targetX =
-          canvas.width / 2 + (particle.anchorX - canvas.width / 2) * pulse;
-        const targetY =
-          canvas.height / 2 + (particle.anchorY - canvas.height / 2) * pulse;
-        const dx = targetX - particle.x;
-        const dy = targetY - particle.y;
-        const ax = dx * SPRING_CONSTANT;
-        const ay = dy * SPRING_CONSTANT;
+        if (advance) {
+          const targetX =
+            width / 2 + (particle.anchorX - width / 2) * pulse;
+          const targetY =
+            height / 2 + (particle.anchorY - height / 2) * pulse;
+          const dx = targetX - particle.x;
+          const dy = targetY - particle.y;
+          const ax = dx * SPRING_CONSTANT;
+          const ay = dy * SPRING_CONSTANT;
 
-        particle.vx += ax;
-        particle.vy += ay;
-        particle.phase += 0.018;
-        particle.vx += Math.cos(time * 1.7 + particle.phase) * 0.006;
-        particle.vy += Math.sin(time * 1.35 + particle.phase) * 0.006;
-        particle.vx += (Math.random() - 0.5) * NOISE;
-        particle.vy += (Math.random() - 0.5) * NOISE;
+          particle.vx += ax;
+          particle.vy += ay;
+          particle.phase += 0.018;
+          particle.vx += Math.cos(time * 1.7 + particle.phase) * 0.006;
+          particle.vy += Math.sin(time * 1.35 + particle.phase) * 0.006;
+          particle.vx += (Math.random() - 0.5) * NOISE;
+          particle.vy += (Math.random() - 0.5) * NOISE;
 
-        particle.vx *= DAMPING;
-        particle.vy *= DAMPING;
+          particle.vx *= DAMPING;
+          particle.vy *= DAMPING;
 
-        particle.x += particle.vx;
-        particle.y += particle.vy;
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+        }
 
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
@@ -140,19 +156,19 @@ const BrainCanvas: React.FC = () => {
         ctx.fill();
       });
 
-      for (let i = 0; i < particles.length; i += 1) {
-        const searchLimit = Math.min(i + 42, particles.length);
-        for (let j = i + 1; j < searchLimit; j += 1) {
+      for (let particleIndex = 0; particleIndex < particles.length; particleIndex += 1) {
+        const searchLimit = Math.min(particleIndex + 42, particles.length);
+        for (let otherIndex = particleIndex + 1; otherIndex < searchLimit; otherIndex += 1) {
           const dist = Math.hypot(
-            particles[i].x - particles[j].x,
-            particles[i].y - particles[j].y,
+            particles[particleIndex].x - particles[otherIndex].x,
+            particles[particleIndex].y - particles[otherIndex].y,
           );
           const MAX_DIST = 36;
 
           if (dist < MAX_DIST) {
             ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.moveTo(particles[particleIndex].x, particles[particleIndex].y);
+            ctx.lineTo(particles[otherIndex].x, particles[otherIndex].y);
             ctx.strokeStyle = `rgba(${accentColor}, ${0.56 - dist / (MAX_DIST * 1.08)})`;
             ctx.lineWidth = 0.9;
             ctx.stroke();
@@ -160,21 +176,47 @@ const BrainCanvas: React.FC = () => {
         }
       }
 
+    };
+
+    const animate = () => {
+      draw(true);
       animationFrameId = requestAnimationFrame(animate);
     };
 
     resizeCanvas();
-    animate();
+    let isVisible = false;
+    const syncAnimation = () => {
+      cancelAnimationFrame(animationFrameId);
+      draw(false);
+      if (!reducedMotion && !pausedRef.current && isVisible && !document.hidden) {
+        animationFrameId = requestAnimationFrame(animate);
+      }
+    };
+    syncRef.current = syncAnimation;
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      syncAnimation();
+    });
+    observer.observe(canvas);
+    draw(false);
 
-    window.addEventListener("resize", resizeCanvas);
+    const handleResize = () => {
+      resizeCanvas();
+      syncAnimation();
+    };
+    window.addEventListener("resize", handleResize);
+    document.addEventListener("visibilitychange", syncAnimation);
 
     return () => {
-      window.removeEventListener("resize", resizeCanvas);
+      syncRef.current = null;
+      observer.disconnect();
+      window.removeEventListener("resize", handleResize);
+      document.removeEventListener("visibilitychange", syncAnimation);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [reducedMotion]);
 
-  return <canvas ref={canvasRef} className="brain-canvas" />;
+  return <canvas ref={canvasRef} className="brain-canvas" aria-hidden="true" />;
 };
 
 export default BrainCanvas;

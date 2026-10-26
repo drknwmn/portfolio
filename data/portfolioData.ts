@@ -1,301 +1,247 @@
-import {
-  AcademicItem,
-  Award,
-  ContactLink,
-  Course,
-  Demo,
-  HeroStatement,
-  NavItem,
-  Presentation,
-  Publication,
-  ResearchTopic,
-  SiteSectionIntro,
+import type {
+  AcademicItem, Award, ContactLink, HeroStatement, NavItem,
+  Presentation, Publication, ResearchTopic,
 } from "../types";
+import { additionalPresentations } from "./presentationArchive";
 
 export const navItems: NavItem[] = [
-  { label: "About", path: "about", type: "scroll" },
-  { label: "Research", path: "/research", type: "route" },
-  { label: "Courses", path: "/courses", type: "route" },
-  { label: "Demos", path: "/demos", type: "route" },
-  { label: "Contact", path: "contact", type: "scroll" },
+  { label: "Research", path: "/research" },
+  { label: "Publications", path: "/publications" },
+  { label: "Software", path: "/software" },
+  { label: "About", path: "/", hash: "#about" },
+  { label: "Contact", path: "/", hash: "#contact" },
 ];
 
 export const heroStatement: HeroStatement = {
-  eyebrow: "Neuroscience • Complexity • Consciousness",
+  eyebrow: "Computational neuroscience",
   title: "Derek Newman",
-  subtitle: "I study how brain dynamics organize consciousness, and I build visual systems to explain it.",
+  subtitle: "Brain dynamics, consciousness, and recovery.",
+  affiliation: "PhD candidate · McGill University",
   description:
-    "PhD candidate at McGill University working across EEG, fMRI, complexity science, criticality, and machine learning. The site is designed as a premium academic portfolio with room for demos, theory explainers, and future interactive scientific tools.",
-  metrics: [
-    { label: "Primary modalities", value: "EEG • fMRI • MEG" },
-    { label: "Core themes", value: "Criticality • Entropy • Recovery" },
-    { label: "Mode", value: "Researcher • Builder • Visual thinker" },
-  ],
-};
-
-export const aboutIntro: SiteSectionIntro = {
-  eyebrow: "About",
-  title: "Research grounded in clinical neuroscience, complexity theory, and computational modeling.",
-  description:
-    "My work focuses on how neural dynamics reorganize across consciousness, sedation, and severe brain injury. I combine signal analysis, machine learning, and scientific visualization to build interpretable tools and strong conceptual models.",
+    "I study how brain dynamics change across anesthesia and severe brain injury, and when those changes reveal information about consciousness and recovery. My work combines EEG, nonlinear dynamics, machine learning, and scientific software.",
 };
 
 export const contactLinks: ContactLink[] = [
-  {
-    label: "Email",
-    value: "derek.newman@mail.mcgill.ca",
-    href: "mailto:derek.newman@mail.mcgill.ca",
-  },
-  {
-    label: "Focus",
-    value: "Consciousness, NeuroAI, Dynamical Brain States",
-    href: "#",
-  },
-  {
-    label: "Based in",
-    value: "Montreal, Quebec",
-    href: "#",
-  },
+  { label: "Email", value: "derek.newman@mail.mcgill.ca", href: "mailto:derek.newman@mail.mcgill.ca" },
+  { label: "GitHub", value: "drknwmn", href: "https://github.com/drknwmn" },
+  { label: "Google Scholar", value: "Publications & citations", href: "https://scholar.google.com/citations?user=jwdetgQAAAAJ&hl=en" },
 ];
 
 export const researchTopics: ResearchTopic[] = [
   {
-    title: "Criticality and complexity in neural systems",
+    id: "state-transitions",
+    title: "How do brains change state?",
     description:
-      "I study whether healthy and disrupted brain states occupy specific regions of the order-disorder landscape, and whether those transitions can be measured reliably in electrophysiology and neuroimaging.",
+      "Different measures of complexity can tell different stories about the same brain state. I study how entropy and structured complexity change together during anesthesia, and how baseline dynamics relate to individual responses.",
+    status: "Published research",
     details: [
-      "Entropy, fractal, and multiscale complexity metrics for EEG and fMRI.",
-      "Brain-state transitions under anesthesia and during recovery.",
-      "Interpretation of complexity changes in a clinical context.",
+      "Complementary measures of randomness and structured complexity.",
+      "EEG trajectories during propofol sedation in two independent cohorts.",
+      "Baseline dynamics and individual susceptibility to anesthesia.",
     ],
-    tags: ["Criticality", "Entropy", "Dynamical systems"],
+    tags: ["Anesthesia", "Complexity–entropy", "EEG"],
   },
   {
-    title: "Consciousness assessment and prognosis",
+    id: "consciousness-recovery",
+    title: "When do neural dynamics inform recovery?",
     description:
-      "I develop biomarkers that track conscious processing, predict recovery trajectories, and support better stratification in disorders of consciousness and pediatric intensive care.",
+      "I investigate when spontaneous EEG carries information about functional outcome and the brain’s response to perturbation. Injury etiology, measurable responses, and recording conditions define important limits on generalization.",
+    status: "Published research and preprint",
     details: [
-      "Sedation-state characterization with EEG criticality features.",
-      "Outcome prediction in severe brain injury.",
-      "Clinically grounded marker design and validation.",
+      "Retrospective outcome modelling in sedated pediatric intensive care.",
+      "Spontaneous EEG and TMS-derived perturbational complexity.",
+      "Explicit assessment of where predictive relationships fail to generalize.",
     ],
-    tags: ["DOC", "ICU", "Prediction"],
+    tags: ["Brain injury", "Perturbational complexity", "Prediction"],
   },
   {
-    title: "Machine learning for neuroimaging",
+    id: "multiscale-models",
+    title: "How do local dynamics shape whole-brain organization?",
     description:
-      "I use statistical learning and representation methods to identify latent structure in neural data and to connect brain dynamics with prognosis, diagnosis, and theory.",
+      "I develop computational models and analyse neuroimaging data to examine relationships between local neural dynamics, network organization, and synchronization. This ongoing work connects empirical observations with candidate mechanisms.",
+    status: "Ongoing research",
     details: [
-      "Supervised classification of conscious versus unconscious states.",
-      "Unsupervised embeddings of neural trajectories.",
-      "Graph-based and temporal models for multimodal data.",
+      "Local Ising-like dynamics coupled through delayed Kuramoto interactions.",
+      "Multiscale modelling presented at Camillo Golgi and ICMNS.",
+      "Exploratory work on regional temporal scaling and functional gradients.",
     ],
-    tags: ["ML", "Neuroimaging", "Representation learning"],
-  },
-  {
-    title: "Scientific visualization and theory communication",
-    description:
-      "I build custom diagrams, animated figures, and concept-driven visuals that translate difficult theoretical material into rigorous but elegant explanations.",
-    details: [
-      "Neural geometry, dynamical systems, and criticality visuals.",
-      "Publication and presentation figure systems.",
-      "Interactive demos for future theory pages.",
-    ],
-    tags: ["Visual systems", "Explainers", "Scientific branding"],
+    tags: ["Dynamical systems", "Modelling", "Neuroimaging"],
   },
 ];
 
 export const publications: Publication[] = [
   {
-    title: "EEG criticality as a prognostic tool for functional outcomes in sedated pediatric intensive care patients",
-    authors:
-      "Newman, D., Grinberg, M., Jones, K., Woodward, K., Esser, M. J., & Blain-Moraes, S.",
-    journal: "Annals of Clinical and Translational Neurology",
-    year: 2025,
-    summary:
-      "Shows how criticality-derived EEG features can improve prognosis in highly challenging clinical settings.",
+    id: "newman-2026-propofol",
+    figureId: "propofol",
+    title: "Reframing ‘paradoxical’ excitation: disentangling electroencephalogram complexity and entropy reveals resting-state dynamics associated with propofol susceptibility in healthy adults",
+    authors: "Newman, D., Maschke, C., Mashour, G. A., & Blain-Moraes, S.",
+    journal: "British Journal of Anaesthesia",
+    citation: "137(2), 525–534",
+    year: 2026,
+    publishedAt: "2026-06-01",
+    status: "Published",
+    authorshipNote: "Derek Newman and Charlotte Maschke contributed equally.",
+    contribution: "Co-conception, computational analysis, and manuscript drafting and revision.",
+    summary: "Across two propofol cohorts, we distinguished changes in randomness from changes in structured complexity. The resulting trajectories characterized divergent neural responses to sedation and related baseline dynamics to propofol susceptibility.",
+    doi: "10.1016/j.bja.2026.03.082",
+    featured: true,
     links: [
-      { name: "PDF", url: "#" },
-      { name: "DOI", url: "#" },
+      { name: "Article / DOI", url: "https://doi.org/10.1016/j.bja.2026.03.082" },
+      { name: "PubMed", url: "https://pubmed.ncbi.nlm.nih.gov/42225443/" },
+      { name: "Analysis code", url: "https://github.com/drknwmn/eeg-complexity-propofol" },
     ],
   },
   {
+    id: "newman-2026-picu",
+    figureId: "picu",
+    title: "EEG criticality as a prognostic tool for functional outcomes in sedated pediatric intensive care patients",
+    authors: "Newman, D., Grinberg, M., Jones, K., Woodward, K., Esser, M. J., & Blain-Moraes, S.",
+    journal: "Frontiers in Computational Neuroscience",
+    citation: "20, 1831476",
+    year: 2026,
+    publishedAt: "2026-07-08",
+    status: "Published",
+    contribution: "Study design, analysis pipeline, modelling, and writing; first author.",
+    summary: "In a retrospective study of 32 sedated pediatric intensive-care patients, EEG features carried information about later functional outcome beyond demographics. Larger independent studies are needed to establish generalizability.",
+    doi: "10.3389/fncom.2026.1831476",
+    featured: true,
+    links: [
+      { name: "Article / DOI", url: "https://doi.org/10.3389/fncom.2026.1831476" },
+      { name: "Full text", url: "https://www.frontiersin.org/journals/computational-neuroscience/articles/10.3389/fncom.2026.1831476/full" },
+      { name: "Analysis code", url: "https://github.com/drknwmn/PICU-Criticality-Prognosis" },
+    ],
+  },
+  {
+    id: "newman-2026-doc-pci",
+    title: "Critical dynamics in spontaneous EEG predict perturbational complexity in disorders of consciousness with measurable evoked responses",
+    authors: "Newman, D., Maschke, C., O’Byrne, J., Colombo, M. A., Comanducci, A., Casarotto, S., Citerio, G., Rosanova, M., Massimini, M., Jerbi, K., & Blain-Moraes, S.",
+    journal: "bioRxiv",
+    year: 2026,
+    publishedAt: "2026-06-09",
+    status: "Preprint",
+    contribution: "Feature extraction, modelling, interpretation, and writing; first author.",
+    summary: "Spontaneous EEG features did not generalize prediction across the full heterogeneous cohort. Associations emerged in restricted response and etiology groups, identifying boundary conditions linking spontaneous and evoked complexity.",
+    doi: "10.64898/2026.06.04.730221",
+    featured: true,
+    links: [
+      { name: "Preprint / DOI", url: "https://doi.org/10.64898/2026.06.04.730221" },
+      { name: "Version record", url: "https://sciety.org/articles/activity/10.64898/2026.06.04.730221" },
+    ],
+  },
+  {
+    id: "naish-2025-epilepsy",
     title: "Neural Complexity and Prognosis: Predicting Recovery in Pediatric Epilepsy Using EEG Markers",
     authors: "Naish, M., Newman, D., & Blain-Moraes, S.",
     journal: "McGill Science Undergraduate Research Journal",
+    citation: "20(1), 1–8",
     year: 2025,
-    summary:
-      "Explores whether complexity metrics capture clinically meaningful information during recovery trajectories.",
+    publishedAt: "2025-03-31",
+    status: "Published",
+    contribution: "Student mentorship, research guidance, and coauthorship.",
+    summary: "A student-led study examined EEG complexity during sedation and recovery in 12 pediatric epilepsy patients. The small retrospective sample motivates further validation in larger cohorts.",
+    doi: "10.26443/msurj.v1i1.288",
+    featured: false,
     links: [
-      { name: "PDF", url: "#" },
-      { name: "DOI", url: "#" },
+      { name: "Article / DOI", url: "https://doi.org/10.26443/msurj.v1i1.288" },
+      { name: "Full text", url: "https://msurjonline.mcgill.ca/article/view/288" },
     ],
-  },
-  {
-    title: "Disentangling EEG complexity and entropy: Resting-state dynamics predict paradoxical brain responses to anesthesia",
-    authors: "Newman, D., Maschke, C., & Blain-Moraes, S.",
-    journal: "Manuscript in preparation",
-    year: 2025,
-    summary:
-      "Separates complexity from entropy to explain counterintuitive neural responses under anesthesia.",
-    links: [
-      { name: "Abstract", url: "#" },
-      { name: "Preprint", url: "#" },
-    ],
-  },
-];
-
-export const courses: Course[] = [
-  {
-    title: "Computational Neuroscience Foundations",
-    id: "NEUR-COMP-401",
-    description:
-      "A structured introduction to dynamical systems, signal analysis, network models, and the logic of computational explanations in neuroscience.",
-    format: "Seminar + code lab",
-    focus: ["Signals and spectra", "Network thinking", "State-space intuition"],
-  },
-  {
-    title: "Consciousness Science and Neural Dynamics",
-    id: "NEUR-CONSC-510",
-    description:
-      "An advanced course on theories of consciousness, anesthesia, disorders of consciousness, and the quantitative tools used to study them.",
-    format: "Graduate reading + figure-based discussion",
-    focus: ["Theory comparison", "Clinical translation", "Consciousness metrics"],
-  },
-  {
-    title: "Machine Learning for Brain Data",
-    id: "NEUR-ML-550",
-    description:
-      "Practical methods for classification, embeddings, and interpretable models applied to EEG, fMRI, and multimodal brain-state datasets.",
-    format: "Methods course",
-    focus: ["Supervised learning", "Embeddings", "Model interpretation"],
-  },
-];
-
-export const demos: Demo[] = [
-  {
-    title: "Complexity-entropy causal plane",
-    description:
-      "A reusable explainer for how entropy and statistical complexity jointly characterize neural states across sedation and recovery.",
-    tags: ["Entropy", "Complexity", "State space"],
-    latexEquation:
-      "H[P] = -\\sum_{i=1}^{N} p_i \\log p_i \\quad\\quad C[P] = Q_J[P, P_e] \\cdot H[P]",
-  },
-  {
-    title: "Spectral slope and neural organization",
-    description:
-      "A conceptual and computational module for linking 1/f structure, scale-free dynamics, and shifts in cortical organization.",
-    tags: ["1/f", "Spectra", "Critical dynamics"],
-    latexEquation: "P(f) \\propto \\frac{1}{f^{\\beta}}",
-    codeSnippet: `
-import numpy as np
-
-def spectral_slope(freqs, psd):
-    x = np.log10(freqs[1:])
-    y = np.log10(psd[1:])
-    slope, intercept = np.polyfit(x, y, 1)
-    return slope, intercept
-    `,
-    language: "python",
-  },
-  {
-    title: "Attractor landscapes for brain-state transitions",
-    description:
-      "A demo family for communicating how neural states may move across basins, transitions, and metastable regimes.",
-    tags: ["Attractors", "Dynamics", "Theory visuals"],
-    latexEquation: "\\dot{x} = -\\nabla V(x) + \\eta(t)",
   },
 ];
 
 export const academicBackground: AcademicItem[] = [
   {
-    tenure: "2023 – Present",
-    title: "PhD Candidate in Neuroscience",
+    tenure: "2025 – Present",
+    title: "PhD candidate in Neuroscience",
     institution: "McGill University",
-    description:
-      "Integrated Program in Neuroscience. Investigating neural criticality, complexity, and recovery markers across anesthesia and brain injury.",
+    description: "Integrated Program in Neuroscience. Transferred directly from the MSc track in September 2025; research on neural dynamics, consciousness, and brain-state transitions.",
   },
   {
-    tenure: "2021 – 2023",
-    title: "MSc in Neuroscience",
+    tenure: "2023 – 2025",
+    title: "Graduate research, MSc track",
     institution: "McGill University",
-    description:
-      "Developed EEG prognostic pipelines for pediatric intensive care and advanced directly into the PhD program.",
+    description: "Entered the Integrated Program in Neuroscience in September 2023 and continued into the PhD without a separate MSc degree.",
   },
   {
-    tenure: "2015 – 2019",
-    title: "BSc in Behavioural Neuroscience",
+    tenure: "2020 – 2023",
+    title: "BSc, Honours Behavioural Neuroscience",
     institution: "Concordia University",
-    description:
-      "Graduated with distinction. Honours work focused on critical dynamics in multimodal neuroimaging.",
+    description: "Research training in multimodal neuroimaging, functional connectivity, and nonlinear time-series analysis, including simultaneous fMRI and FDG-fPET.",
   },
 ];
 
 export const awards: Award[] = [
-  {
-    year: "2025–2026",
-    name: "UNIQUE Excellence Scholarship",
-    awardedBy: "UNIQUE NeuroAI Program",
-  },
-  {
-    year: "2025",
-    name: "Travel Grant",
-    awardedBy: "IEEE Brain Discovery & Neurotechnology Workshop",
-  },
-  {
-    year: "2025",
-    name: "Travel Grant",
-    awardedBy: "UNIQUE NeuroAI Program",
-  },
+  { year: "2026–2027", name: "Internal Studentship", awardedBy: "McGill Faculty of Medicine and Health Sciences" },
+  { year: "2026", name: "Millénium Québecor Award · Best poster presentation", awardedBy: "UNIQUE Student Symposium" },
+  { year: "2026", name: "Oral presentation competition · Third place", awardedBy: "BRaIN Symposium" },
+  { year: "2025–2026", name: "UNIQUE Excellence Scholarship", awardedBy: "UNIQUE NeuroAI Research Center" },
+  { year: "2025", name: "Camillo Golgi Presentation Award", awardedBy: "School of Brain Cells & Circuits, Erice" },
+  { year: "2025", name: "IEEE Brain Travel Grant", awardedBy: "IEEE Brain Discovery & Neurotechnology Workshop" },
+  { year: "2025", name: "Conference Travel Award", awardedBy: "UNIQUE · ASSC 2025" },
 ];
 
-export const oralPresentations: Presentation[] = [
+const selectedPresentationRecords: Presentation[] = [
   {
-    title:
-      "Brain criticality under GABAergic sedation outperforms drug-free state in predicting recovery of consciousness after severe brain injury across the lifespan",
-    authors:
-      "Newman, D., Maschke, C., Norton, L., Duclos, C., Laforge, G., et al.",
-    event: "Association for the Scientific Study of Consciousness",
-    year: 2025,
-    location: "Crete, Greece",
+    id: "ipn-2026-propofol",
+    title: "Reframing ‘paradoxical’ excitation: disentangling electroencephalogram complexity and entropy reveals resting-state dynamics associated with propofol susceptibility in healthy adults",
+    authors: "Newman, D., Maschke, C., Mashour, G. A., & Blain-Moraes, S.",
+    event: "McGill IPN Retreat", date: "September 10, 2026",
+    location: "Montreal Science Centre, Montreal, Canada", format: "Poster", presenter: "Derek Newman",
   },
   {
-    title:
-      "Prognostic value of EEG criticality features for assessing recovery in sedated pediatric intensive care patients",
-    authors: "Newman, D., Grinberg, M., Woodward, K., Esser, M., Jones, K., & Blain-Moraes, S.",
-    event: "IBIA World Congress on Brain Injury",
-    year: 2025,
-    location: "Montreal, Canada",
+    id: "integrate-fire-2026",
+    title: "Detecting Consciousness in Brain Injured Patients Using Anaesthesia as a Perturbation",
+    authors: "Newman, D.", event: "Integrate and Fire Seminar Series", date: "March 23, 2026",
+    location: "Montreal, Canada", format: "Invited talk", presenter: "Derek Newman",
   },
   {
-    title: "Changes in EEG microstate complexity during cognitive recovery following anesthesia in healthy participants",
-    authors: "Banerji, A., Newman, D., Blain-Moraes, S., & Sleigh, J.",
-    event: "Canadian Consciousness Research Symposium",
-    year: 2024,
-    location: "Montreal, Canada",
+    id: "brain-2026-propofol",
+    title: "Disentangling EEG Complexity and Entropy Reveals Resting-State Dynamics Associated with Propofol Susceptibility",
+    authors: "Newman, D., Maschke, C., Mashour, G., & Blain-Moraes, S.",
+    event: "BRaIN Symposium", date: "March 3, 2026",
+    location: "Montreal, Canada", format: "Oral presentation", presenter: "Derek Newman",
   },
-];
-
-export const posterPresentations: Presentation[] = [
   {
+    id: "wcicc-2025-picu",
     title: "EEG criticality as a prognostic tool for functional outcomes in sedated pediatric intensive care patients",
     authors: "Newman, D., Grinberg, M., Jones, K., Woodward, K., Esser, M. J., & Blain-Moraes, S.",
-    event: "World Congress in Intensive and Critical Care",
-    year: 2025,
-    location: "Vancouver, Canada",
+    event: "WCICC 2025", date: "September 16–19, 2025",
+    location: "Vancouver, Canada", format: "Poster", presenter: "Derek Newman",
   },
   {
-    title: "Tracking neural state transitions under anesthesia using the complexity-entropy causal plane",
+    id: "ieee-2025-complexity",
+    title: "Tracking Neural State Transitions under Anesthesia Using the Complexity-Entropy Causal Plane (CECP)",
     authors: "Newman, D., & Blain-Moraes, S.",
-    event: "IEEE Brain Discovery & Neurotechnology Workshop",
-    year: 2025,
-    location: "Vancouver, Canada",
+    event: "3rd IEEE Brain Discovery & Neurotechnology Workshop", date: "September 12–13, 2025",
+    location: "Vancouver, Canada", format: "Poster", presenter: "Derek Newman",
   },
   {
-    title: "Self-similar properties of simultaneous fPET and fMRI",
+    id: "assc-2025-lifespan",
+    title: "Brain criticality under GABAergic sedation outperforms drug-free state in predicting recovery of consciousness after severe brain injury across the lifespan",
+    authors: "Newman, D., Maschke, C., Norton, L., Duclos, C., Laforge, G., Wang, X., Al-Hayawi, H., Lavoie, R., Jones, K., Grinberg, M., Woodward, K., Sekhon, M., Edlow, B., Esser, M., Owen, A. M., & Blain-Moraes, S.",
+    event: "ASSC 28", date: "July 6–9, 2025",
+    location: "Crete, Greece", format: "Oral presentation", presenter: "Derek Newman",
+  },
+  {
+    id: "ibia-2025-picu",
+    title: "Prognostic Value of EEG Criticality Features for Assessing Recovery in Sedated Pediatric Intensive Care Patients",
+    authors: "Newman, D., Grinberg, M., Woodward, K., Esser, M., Jones, K., & Blain-Moraes, S.",
+    event: "IBIA 15th World Congress on Brain Injury", date: "March 19–22, 2025",
+    location: "Montreal, Canada", format: "Oral presentation", presenter: "Derek Newman",
+  },
+  {
+    id: "ccrs-2024-microstates",
+    title: "Changes in EEG Microstate Complexity During Cognitive Recovery Following Anesthesia in Healthy Participants",
+    authors: "Banerji, A., Newman, D., Blain-Moraes, S., & Sleigh, J.",
+    event: "Canadian Consciousness Research Symposium", date: "November 14–15, 2024",
+    location: "Montreal, Canada", format: "Coauthored oral presentation",
+  },
+  {
+    id: "perform-2023-fpet",
+    title: "Self-Similar Properties of Simultaneous fPET and fMRI",
     authors: "Newman, D., Paul, J., & Steele, C. J.",
-    event: "PERFORM Student Health Research Event",
-    year: 2019,
-    location: "Montreal, Canada",
+    event: "PERFORM Student Health Research Event", date: "2023",
+    location: "Montreal, Canada", format: "Poster", presenter: "Derek Newman",
   },
 ];
+
+export const presentations: Presentation[] = [...selectedPresentationRecords, ...additionalPresentations];

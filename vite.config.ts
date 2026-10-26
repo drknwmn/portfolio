@@ -4,8 +4,8 @@ import react from '@vitejs/plugin-react';
 
 const repoBase = '/portfolio/';
 
-export default defineConfig(({ command }) => ({
-  base: command === 'build' ? repoBase : '/',
+export default defineConfig(({ command, isPreview }) => ({
+  base: command === 'build' || isPreview ? repoBase : '/',
   server: {
     port: 3000,
     host: '0.0.0.0',

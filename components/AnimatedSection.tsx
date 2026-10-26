@@ -1,23 +1,25 @@
-import React, { ReactNode } from "react";
+import React, { ComponentPropsWithoutRef, ReactNode } from "react";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
+import useReducedMotion from "../hooks/useReducedMotion";
 
-interface AnimatedSectionProps {
+interface AnimatedSectionProps extends ComponentPropsWithoutRef<"section"> {
   children: ReactNode;
-  className?: string;
-  id?: string;
+  as?: "section" | "article" | "div";
 }
 
-const AnimatedSection: React.FC<AnimatedSectionProps> = ({ children, className = "", id }) => {
-  const [ref, isVisible] = useIntersectionObserver<HTMLDivElement>();
+const AnimatedSection: React.FC<AnimatedSectionProps> = ({ children, className = "", as: Element = "section", ...sectionProps }) => {
+  const [ref, isVisible] = useIntersectionObserver<HTMLElement>();
+  const reducedMotion = useReducedMotion();
 
   return (
-    <section
-      id={id}
-      ref={ref}
-      className={`reveal-section ${isVisible ? "is-visible" : "is-hidden"} ${className}`.trim()}
+    <Element
+      {...sectionProps}
+      ref={(element: HTMLElement | null) => { ref.current = element; }}
+      className={`reveal-section ${isVisible && !reducedMotion ? "is-visible" : ""} ${className}`.trim()}
+      data-reveal={isVisible || reducedMotion ? "visible" : "pending"}
     >
       {children}
-    </section>
+    </Element>
   );
 };
 

@@ -1,0 +1,13 @@
+import { Link } from "react-router-dom";
+import AnimatedSection from "../components/AnimatedSection";
+
+const NeuroComplexityPage = () => (
+  <div className="page-content neurocomplexity-page">
+    <header className="page-intro page-intro--compact"><Link className="inline-link" to="/software">← Software</Link><p className="eyebrow section-link">Framework · Active development</p><h1 className="page-title">NeuroComplexity</h1><p className="section-description">A Python framework I develop for nonlinear EEG analysis, connecting reusable signal representations, feature extraction, and inspectable workflows.</p><p className="supporting-text">The current framework repository is private. This page is an overview, not a public software release.</p></header>
+    <AnimatedSection className="bibliography-section" aria-labelledby="framework-methods"><p className="eyebrow">Methods</p><h2 className="subsection-title" id="framework-methods">From recordings to interpretable measurements</h2><ul className="item-detail-list"><li>Shared signal representations and configurable analysis workflows.</li><li>Nonlinear EEG features across complexity, entropy, and temporal organization.</li><li>Quality reporting and provenance to make analysis choices inspectable.</li></ul><Link className="inline-link section-link" to="/research">See the research context ↗</Link></AnimatedSection>
+    <AnimatedSection className="bibliography-section" id="education" tabIndex={-1} aria-labelledby="education-title"><p className="eyebrow">Education · In development</p><h2 className="subsection-title" id="education-title">Education & learning resources</h2><p className="section-description">I’m developing the educational side of NeuroComplexity. This page will connect to its standalone learning site when that is available.</p><p className="item-description">For now, the BIAPT lab’s EEG Python tutorials are publicly available on GitHub. These are lab resources, separate from a NeuroComplexity education release.</p><a className="inline-link section-link" href="https://github.com/BIAPT/EEG_Python_Tutorials">Explore the lab EEG tutorials ↗</a></AnimatedSection>
+    <AnimatedSection className="bibliography-section" aria-labelledby="public-code-title"><p className="eyebrow">Repositories</p><h2 className="subsection-title" id="public-code-title">Public analysis code</h2><p className="section-description">Project-specific analysis repositories accompany the propofol and pediatric ICU studies.</p><Link className="inline-link section-link" to="/software">Browse the public repositories ↗</Link></AnimatedSection>
+  </div>
+);
+
+export default NeuroComplexityPage;

@@ -1,161 +1,31 @@
-import React from "react";
-import LinkIcon from "../components/icons/LinkIcon";
+import { Link } from "react-router-dom";
+import ResearchStudies from "../components/research/ResearchStudies";
+import { researchTopics } from "../data/portfolioData";
 import AnimatedSection from "../components/AnimatedSection";
-import {
-  academicBackground,
-  awards,
-  oralPresentations,
-  posterPresentations,
-  publications,
-  researchTopics,
-} from "../data/portfolioData";
-import {
-  AcademicItem,
-  Award,
-  Presentation,
-  Publication,
-  ResearchTopic,
-} from "../types";
 
-const ResearchTopicCard: React.FC<{ topic: ResearchTopic }> = ({ topic }) => (
-  <article className="glass-card glass-card--hover">
-    <p className="section-kicker">{topic.tags?.join(" • ")}</p>
-    <h3 className="item-title">{topic.title}</h3>
-    <p className="item-description">{topic.description}</p>
-    {topic.details && (
-      <ul className="item-detail-list">
-        {topic.details.map((detail) => (
-          <li key={detail}>{detail}</li>
-        ))}
-      </ul>
-    )}
-  </article>
-);
-
-const PublicationCard: React.FC<{ publication: Publication }> = ({ publication }) => (
-  <article className="glass-card glass-card--hover">
-    <p className="item-meta">
-      {publication.journal} • {publication.year}
-    </p>
-    <h3 className="item-title">{publication.title}</h3>
-    <p className="item-description">{publication.authors}</p>
-    {publication.summary && <p className="item-description">{publication.summary}</p>}
-    <div className="link-row">
-      {publication.links.map((link) => (
-        <a
-          key={link.name}
-          href={link.url}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-link"
-        >
-          <LinkIcon />
-          <span>{link.name}</span>
-        </a>
-      ))}
-    </div>
-  </article>
-);
-
-const TimelineCard: React.FC<{ item: AcademicItem | Award }> = ({ item }) => (
-  <article className="glass-card">
-    <p className="item-meta">{"tenure" in item ? item.tenure : item.year}</p>
-    <h3 className="item-title">{item.name ?? item.title}</h3>
-    <p className="item-description">
-      {"institution" in item ? item.institution : item.awardedBy}
-    </p>
-    {"description" in item && <p className="item-description">{item.description}</p>}
-  </article>
-);
-
-const PresentationCard: React.FC<{ item: Presentation }> = ({ item }) => (
-  <article className="glass-card">
-    <h3 className="item-title">{item.title}</h3>
-    <p className="item-description">{item.authors}</p>
-    <p className="item-meta">
-      {item.event} • {item.year}
-    </p>
-    <p className="item-description">{item.location}</p>
-  </article>
-);
-
-const ResearchPage: React.FC = () => (
-  <AnimatedSection className="section-shell">
-    <div className="section-card">
-      <div className="section-intro">
-        <p className="eyebrow">Research</p>
-        <h1 className="section-title">An academic portfolio built for depth, clarity, and future scientific demos.</h1>
-        <p className="section-description">
-          This section keeps the page-based architecture you already use, but
-          tightens the rhythm, density, and visual language so publications,
-          theory threads, and clinical work feel cohesive.
-        </p>
+const ResearchPage = () => (
+  <div className="page-content research-page">
+    <header className="page-intro research-intro">
+      <p className="eyebrow">Research</p>
+      <h1 className="page-title">Brain dynamics across changing states.</h1>
+      <p className="research-lead">I study how brain dynamics reorganize during anesthesia and after severe brain injury—and when measurements from EEG remain informative across these changing conditions.</p>
+      <p className="section-description">My work combines clinical EEG, nonlinear signal analysis, and computational modelling.</p>
+    </header>
+    <nav className="research-index" aria-label="Research studies">
+      <Link to="/research#state-transitions">Brain-state transitions ↓</Link>
+      <Link to="/research#consciousness-recovery">Brain injury & recovery ↓</Link>
+      <Link to="/research#multiscale-models">Models & methods ↓</Link>
+    </nav>
+    <ResearchStudies />
+    <section className="study-chapter" id="multiscale-models" aria-labelledby="modelling-title" tabIndex={-1}>
+      <AnimatedSection as="div" className="study-heading"><p className="eyebrow">Ongoing research</p><h2 id="modelling-title">Computational models & methods</h2></AnimatedSection>
+      <div className="research-methods">
+        <AnimatedSection as="div"><h3 className="research-subtitle">From local dynamics to collective behavior</h3><p className="item-description">{researchTopics[2].description}</p><p className="item-description">My ongoing work combines local Ising-like dynamics with delayed Kuramoto interactions to investigate candidate mechanisms behind collective neural behavior.</p><Link className="inline-link section-link" to="/software#oscillator-lab">Explore a simplified oscillator model ↗</Link><p className="supporting-text">An illustrative teaching model, separate from the delayed multiscale research implementation.</p></AnimatedSection>
+        <AnimatedSection as="div"><h3 className="research-subtitle">Making analysis choices inspectable</h3><p className="item-description">Alongside these studies, I develop NeuroComplexity: a Python framework for nonlinear EEG analysis, with shared signal representations, configurable feature extraction, quality reporting, and provenance.</p><p className="supporting-text">The framework is in active development and its repository is private. Project-specific analysis code is publicly available.</p><div className="link-row"><Link className="inline-link" to="/software">Public analysis code ↗</Link><Link className="inline-link" to="/software/neurocomplexity">NeuroComplexity & education ↗</Link></div></AnimatedSection>
       </div>
-
-      <section className="list-stack">
-        <div className="section-kicker">Academic background</div>
-        <div className="card-grid">
-          {academicBackground.map((item) => (
-            <TimelineCard key={item.title} item={item} />
-          ))}
-        </div>
-      </section>
-
-      <section className="section-shell" style={{ width: "100%", paddingTop: 36 }}>
-        <div className="section-intro">
-          <div className="section-kicker">Awards and honors</div>
-        </div>
-        <div className="card-grid card-grid--3">
-          {awards.map((award) => (
-            <TimelineCard key={`${award.year}-${award.name}`} item={award} />
-          ))}
-        </div>
-      </section>
-
-      <section className="section-shell" style={{ width: "100%", paddingTop: 36 }}>
-        <div className="section-intro">
-          <div className="section-kicker">Research overview</div>
-        </div>
-        <div className="card-grid card-grid--2">
-          {researchTopics.map((topic) => (
-            <ResearchTopicCard key={topic.title} topic={topic} />
-          ))}
-        </div>
-      </section>
-
-      <section className="section-shell" style={{ width: "100%", paddingTop: 36 }}>
-        <div className="section-intro">
-          <div className="section-kicker">Selected publications</div>
-        </div>
-        <div className="card-grid card-grid--2">
-          {publications.map((publication) => (
-            <PublicationCard key={publication.title} publication={publication} />
-          ))}
-        </div>
-      </section>
-
-      <section className="section-shell" style={{ width: "100%", paddingTop: 36 }}>
-        <div className="two-column">
-          <div>
-            <div className="section-kicker">Oral presentations</div>
-            <div className="list-stack">
-              {oralPresentations.map((item) => (
-                <PresentationCard key={item.title} item={item} />
-              ))}
-            </div>
-          </div>
-          <div>
-            <div className="section-kicker">Poster presentations</div>
-            <div className="list-stack">
-              {posterPresentations.map((item) => (
-                <PresentationCard key={item.title} item={item} />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-  </AnimatedSection>
+    </section>
+    <nav className="research-next" aria-label="More about the work"><Link to="/publications">Full list of papers & presentations ↗</Link><Link id="software" to="/software">Methods & code ↗</Link><Link id="mentorship" to="/software/neurocomplexity#education">NeuroComplexity & education ↗</Link></nav>
+  </div>
 );
 
 export default ResearchPage;
